@@ -6,6 +6,7 @@ import 'package:google_replicapool_v1beta1_api/src/browser_client.dart';
 import "package:google_replicapool_v1beta1_api/replicapool_v1beta1_api_client.dart";
 
 /** The Replica Pool API allows users to declaratively provision and manage groups of Google Compute Engine instances based on a common template. */
+@deprecated
 class Replicapool extends Client with BrowserClient {
 
   /** OAuth Scope2: View and manage your data across Google Cloud Platform services */

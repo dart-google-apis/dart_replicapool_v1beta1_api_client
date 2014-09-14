@@ -16,7 +16,7 @@ class PoolsResource_ {
    *
    * [zone] - The zone for this replica pool.
    *
-   * [poolName] - The name of the replica pool to delete.
+   * [poolName] - The name of the replica pool for this request.
    *
    * [optParams] - Additional query parameters
    */
@@ -56,7 +56,7 @@ class PoolsResource_ {
    *
    * [zone] - The zone for this replica pool.
    *
-   * [poolName] - The name of the replica pool for which you want to get more information.
+   * [poolName] - The name of the replica pool for this request.
    *
    * [optParams] - Additional query parameters
    */
@@ -132,7 +132,7 @@ class PoolsResource_ {
   /**
    * List all replica pools.
    *
-   * [projectName] - The project ID for this replica pool.
+   * [projectName] - The project ID for this request.
    *
    * [zone] - The zone for this replica pool.
    *
@@ -141,7 +141,7 @@ class PoolsResource_ {
    *   Minimum: 0
    *   Maximum: 1000
    *
-   * [pageToken] - Specifies a nextPageToken returned by a previous list request. This token can be used to request the next page of results from a previous list request.
+   * [pageToken] - Set this to the nextPageToken value returned by a previous list request to obtain the next page of results from the previous list request.
    *
    * [optParams] - Additional query parameters
    */
@@ -176,17 +176,15 @@ class PoolsResource_ {
   }
 
   /**
-   * Resize a pool.
+   * Resize a pool. This is an asynchronous operation, and multiple overlapping resize requests can be made. Replica Pools will use the information from the last resize request.
    *
    * [projectName] - The project ID for this replica pool.
    *
    * [zone] - The zone for this replica pool.
    *
-   * [poolName] - The name of the replica pool to resize.
+   * [poolName] - The name of the replica pool for this request.
    *
    * [numReplicas] - The desired number of replicas to resize to. If this number is larger than the existing number of replicas, new replicas will be added. If the number is smaller, then existing replicas will be deleted.
-
-This is an asynchronous operation, and multiple overlapping resize requests can be made. Replica Pools will use the information from the last resize request.
    *
    * [optParams] - Additional query parameters
    */
@@ -230,7 +228,7 @@ This is an asynchronous operation, and multiple overlapping resize requests can 
    *
    * [zone] - The zone for this replica pool.
    *
-   * [poolName] - The name of the replica pool to update.
+   * [poolName] - The name of the replica pool for this request.
    *
    * [optParams] - Additional query parameters
    */
@@ -282,7 +280,7 @@ class ReplicasResource_ {
    *
    * [poolName] - The replica pool name for this request.
    *
-   * [replicaName] - The name of the replica to delete.
+   * [replicaName] - The name of the replica for this request.
    *
    * [optParams] - Additional query parameters
    */
@@ -321,13 +319,13 @@ class ReplicasResource_ {
   /**
    * Gets information about a specific replica.
    *
-   * [projectName] - The name of project ID for this request.
+   * [projectName] - The project ID for this request.
    *
    * [zone] - The zone where the replica lives.
    *
    * [poolName] - The replica pool name for this request.
    *
-   * [replicaName] - The name of the replica for which you want to get more information.
+   * [replicaName] - The name of the replica for this request.
    *
    * [optParams] - Additional query parameters
    */
@@ -366,9 +364,9 @@ class ReplicasResource_ {
   /**
    * Lists all replicas in a pool.
    *
-   * [projectName] - The name of project ID for this request.
+   * [projectName] - The project ID for this request.
    *
-   * [zone] - The zone where the replica lives.
+   * [zone] - The zone where the replica pool lives.
    *
    * [poolName] - The replica pool name for this request.
    *
@@ -377,7 +375,7 @@ class ReplicasResource_ {
    *   Minimum: 0
    *   Maximum: 1000
    *
-   * [pageToken] - Specifies a nextPageToken returned by a previous list request. This token can be used to request the next page of results from a previous list request.
+   * [pageToken] - Set this to the nextPageToken value returned by a previous list request to obtain the next page of results from the previous list request.
    *
    * [optParams] - Additional query parameters
    */
@@ -416,17 +414,17 @@ class ReplicasResource_ {
   /**
    * Restarts a replica in a pool.
    *
-   * [projectName] - The name of project ID for this request.
+   * [projectName] - The project ID for this request.
    *
    * [zone] - The zone where the replica lives.
    *
    * [poolName] - The replica pool name for this request.
    *
-   * [replicaName] - The name of the replica to restart in the pool.
+   * [replicaName] - The name of the replica for this request.
    *
    * [optParams] - Additional query parameters
    */
-  async.Future<core.Map> restart(core.String projectName, core.String zone, core.String poolName, core.String replicaName, {core.Map optParams}) {
+  async.Future<Replica> restart(core.String projectName, core.String zone, core.String poolName, core.String replicaName, {core.Map optParams}) {
     var url = "{projectName}/zones/{zone}/pools/{poolName}/replicas/{replicaName}/restart";
     var urlParams = new core.Map();
     var queryParams = new core.Map();
@@ -454,7 +452,8 @@ class ReplicasResource_ {
 
     var response;
     response = _client.request(url, "POST", urlParams: urlParams, queryParams: queryParams);
-    return response;
+    return response
+      .then((data) => new Replica.fromJson(data));
   }
 }
 
